@@ -36,9 +36,10 @@ export default function Login() {
       <AntDesign name="left" size={54} color="black" style={{alignItems: 'left'}} onPress={() => navigation.goBack()}/>
       </View>
 
-
+      <View style={styles.form}>
       <Image source={require('../../assets/logoEscura.png')} style={styles.imagem} />
 
+<View style={styles.campos}>
       <TextInput
         placeholder="Digite seu email"
         value={email}
@@ -55,10 +56,13 @@ export default function Login() {
         style={styles.input}
         secureTextEntry
       />
+  </View>
 
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Logar</Text>
+        <Text style={styles.buttonText}>Entrar</Text>
       </TouchableOpacity>
+      </View>
+
       </ImageBackground>
     </View>
   );
@@ -84,6 +88,22 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     marginRight: 280, // Alinha a seta à esquerda
   },
+  form: {
+    flex: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    paddingStart: 55,
+    paddingEnd: 55,
+    gap: 30,
+  },
+  campos: {
+    flex: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    gap: 10,
+  },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
@@ -91,20 +111,22 @@ const styles = StyleSheet.create({
   },
   input: {
     width: '100%',
-    height: 40,
+    height: 60,
     borderColor: '#ddd',
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 15,
     marginBottom: 12,
     paddingHorizontal: 10,
     backgroundColor: '#fff',
   },
   button: {
     width: '100%',
+    height: 60,
     padding: 12,
-    borderRadius: 5,
+    borderRadius: 15,
     backgroundColor: '#0066cc',
     alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 10,
   },
   buttonText: {
