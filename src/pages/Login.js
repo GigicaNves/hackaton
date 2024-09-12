@@ -5,8 +5,15 @@ import { auth } from '../server/firebaseConfig'
 import { loginUser } from '../server/login-cadastro';
 import { useNavigation } from '@react-navigation/native';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { useFonts, Inter_400Regular, Inter_700Bold } from '@expo-google-fonts/inter';
 
 export default function Login() {
+
+  const fonts = useFonts({
+    Inter_400Regular,
+    Inter_700Bold,
+  });
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigation = useNavigation();
@@ -33,7 +40,7 @@ export default function Login() {
       <StatusBar style="auto" />
 
       <View style={styles.icon}>
-      <AntDesign name="left" size={54} color="black" style={{alignItems: 'left'}} onPress={() => navigation.goBack()}/>
+      <AntDesign name="left" size={45} color="black" style={{alignItems: 'left'}} onPress={() => navigation.goBack()}/>
       </View>
 
       <View style={styles.form}>
@@ -41,7 +48,7 @@ export default function Login() {
 
 <View style={styles.campos}>
       <TextInput
-        placeholder="Digite seu email"
+        placeholder="Usuário:"
         value={email}
         onChangeText={setEmail}
         style={styles.input}
@@ -50,7 +57,7 @@ export default function Login() {
       />
 
       <TextInput
-        placeholder="Digite sua senha"
+        placeholder="Senha:"
         value={password}
         onChangeText={setPassword}
         style={styles.input}
@@ -61,7 +68,22 @@ export default function Login() {
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Entrar</Text>
       </TouchableOpacity>
+
+      <Text style={styles.text}>_______________  ou  ______________</Text>
+
+      <Text style={styles.textSimple}>
+        Não tem uma conta?{' '}
+        <Text 
+          style={styles.link} 
+          onPress={() => navigation.navigate('Cadastro')} // Navega para a tela de Cadastro
+        >
+          Cadastrar
+        </Text>
+      </Text>
+
       </View>
+
+      
 
       </ImageBackground>
     </View>
@@ -72,18 +94,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     backgroundColor: '#f5f5f5',
   },
   containerBc: {
-    flex: 1,
+    flex: 0,
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
     height: '100%'
   },
   icon: {
-    flex: 0,
     justifyContent: 'left',
     alignItems: 'flex-start',
     marginRight: 280, // Alinha a seta à esquerda
@@ -93,16 +114,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-    paddingStart: 55,
-    paddingEnd: 55,
-    gap: 30,
+    paddingStart: 64,
+    paddingEnd: 64,
+    gap: 25,
+    marginBottom: 45,
   },
   campos: {
     flex: 0,
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-    gap: 10,
+    gap: 5,
   },
   title: {
     fontSize: 24,
@@ -111,27 +133,58 @@ const styles = StyleSheet.create({
   },
   input: {
     width: '100%',
-    height: 60,
-    borderColor: '#ddd',
-    borderWidth: 1,
+    height: 55,
+    fontFamily: 'Inter_700Bold',
+    color: '#04102B',
+    fontSize: 13,
+    
     borderRadius: 15,
     marginBottom: 12,
     paddingHorizontal: 10,
     backgroundColor: '#fff',
+    // Sombras para iOS
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    
+    // Sombras para Android
+    elevation: 5,
   },
   button: {
     width: '100%',
-    height: 60,
+    height: 55,
     padding: 12,
     borderRadius: 15,
-    backgroundColor: '#0066cc',
+    backgroundColor: '#04102B',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 10,
+    // Sombras para iOS
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    
+    // Sombras para Android
+    elevation: 5,
   },
   buttonText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'Inter_700Bold',
   },
+  link: {
+    textDecorationLine: 'underline',
+  },
+  imagem: {
+    margin: 0,
+    padding: 0, 
+  },
+  text: {
+    fontFamily: 'Inter_700Bold',
+  },
+  textSimple: {
+    fontFamily: 'Inter_400Regular',
+  }
 });
