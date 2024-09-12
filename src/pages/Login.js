@@ -26,9 +26,16 @@ export default function Login() {
   return (
 
     <View style={styles.container}>
+    <ImageBackground
+      source={require('../../assets/texturaLogin.png')}
+      style={styles.containerBc}
+    >
       <StatusBar style="auto" />
 
-      <AntDesign name="left" size={24} color="black" onPress={() => navigation.goBack()}/>
+      <View style={styles.icon}>
+      <AntDesign name="left" size={54} color="black" style={{alignItems: 'left'}} onPress={() => navigation.goBack()}/>
+      </View>
+
 
       <Image source={require('../../assets/logoEscura.png')} style={styles.imagem} />
 
@@ -52,6 +59,7 @@ export default function Login() {
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Logar</Text>
       </TouchableOpacity>
+      </ImageBackground>
     </View>
   );
 }
@@ -62,7 +70,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#f5f5f5',
-    padding: 16,
+  },
+  containerBc: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: '100%'
+  },
+  icon: {
+    flex: 0,
+    justifyContent: 'left',
+    alignItems: 'flex-start',
+    marginRight: 280, // Alinha a seta à esquerda
   },
   title: {
     fontSize: 24,
