@@ -7,8 +7,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import Ficha from './Ficha'
 import Perfil from './Perfil'
+import Home from './Home'
 
-export default function Home() {
+export default function Inicio() {
 
     const Tab = createBottomTabNavigator();
     const navigation = useNavigation();
@@ -24,15 +25,11 @@ export default function Home() {
       };
 
   return (
-    <View style={styles.container}>
-
-    <Text style={styles.title}>Tela Home</Text>
-
-    <TouchableOpacity style={styles.button} onPress={handleLogout}>
-      <Text style={styles.buttonText}>Sair da Conta</Text>
-    </TouchableOpacity>
-    
-  </View>
+      <Tab.Navigator initialRouteName="Ficha">
+        <Tab.Screen name="Ficha" component={Ficha} options={{headerShown: false}} />
+        <Tab.Screen name="Home" component={Home} options={{headerShown: false}} />
+        <Tab.Screen name="Perfil" component={Perfil} options={{headerShown: false}} />
+      </Tab.Navigator>
   );
 }
 

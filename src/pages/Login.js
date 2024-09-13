@@ -24,7 +24,7 @@ export default function Login() {
       console.log('Sucesso', `Usuário ${user.email} logado com sucesso!`);
       setEmail('');
       setPassword('');
-      navigation.navigate('Home'); // Navega para a tela Home após login bem-sucedido
+      navigation.navigate('Inicio'); // Navega para a tela Home após login bem-sucedido
     } catch (error) {
       Alert.alert('Erro ao logar', error.message); // Mostra um alerta de erro
     }
