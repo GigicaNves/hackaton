@@ -2,6 +2,10 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, SafeAreaView, Image, Dimensions, ImageBackground, ScrollView} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
+
+import { auth, db } from '../server/firebaseConfig'; // Corrija o caminho conforme necessário
+import { collection, getDocs, query, where } from 'firebase/firestore';
+
 import * as SplashScreen from 'expo-splash-screen';
 import {
   useFonts,
@@ -118,6 +122,9 @@ export default function Home() {
   const [data, setData] = useState(null)
 
   const [consultaAgendada, setConsultaAgendada] = useState(null)
+  const [consultas, setConsultas] = useState([]);
+  const [selectedDate, setSelectedDate] = useState('');
+  const [markedDates, setMarkedDates] = useState({}); // Estado para marcar as datas
 
   const [font, error] = useFonts({
     Inter_100Thin,
@@ -143,7 +150,43 @@ export default function Home() {
     if (font || error) {
       SplashScreen.hideAsync();
     }
-  });
+    if (selectedDate) {
+      fetchConsultas(selectedDate);
+      highlightSelectedDate(selectedDate);
+    }
+  }, [selectedDate]);
+
+  const fetchConsultas = async (date) => {
+    try {
+        const userId = auth.currentUser.uid;
+        const q = query(collection(db, 'users', userId, 'consultas'), where('data', '==', date));
+
+        const querySnapshot = await getDocs(q);
+        const fetchedConsultas = [];
+
+        querySnapshot.forEach((doc) => {
+            fetchedConsultas.push({ id: doc.id, ...doc.data() });
+        });
+
+        if (fetchedConsultas.length > 0) {
+            setConsultaAgendada(`Serviço: ${fetchedConsultas[0].servico}\nHorário: ${fetchedConsultas[0].horario}`);
+        } else {
+            setConsultaAgendada(null);
+        }
+    } catch (error) {
+        console.error('Erro ao buscar consultas: ', error);
+    }
+} 
+
+const highlightSelectedDate = (date) => {
+  const marked = {
+      [date]: {
+          selected: true, 
+          selectedColor: '#04102B', // Cor que você deseja usar para realçar a data
+      }
+  };
+  setMarkedDates(marked);
+}
 
   if (!font && !error) {
     return null;
@@ -176,9 +219,9 @@ export default function Home() {
           <View style={{width: '100%'}}>
             <Text style={{fontFamily: 'Lora_600SemiBold', fontWeight: 600, textAlign: 'center', width: '100%', fontSize: 40}}>CONSULTAS{'\n'}AGENDADAS</Text>
             <Calendar 
+            onDayPress={(day) => {setSelectedDate(day.dateString); setData(day)}}
             style={{marginLeft: windowWidth * 13.255813953488 / 100, marginRight: windowWidth * 13.255813953488 / 100,}} 
 
-            onDayPress={(day) => {setData(day); console.log(day) }}
             onMonthChange={(date) => console.log('onMonthChange', date) }
             onPressArrowLeft={(goToPreviousMonth) => {
               console.log('onPressArrowLeft'); goToPreviousMonth();
@@ -189,6 +232,8 @@ export default function Home() {
 
             monthFormat={'MMMM yyyy'}
 
+            markedDates={markedDates}
+
             />
           </View>
           <View style={{width: '100%', alignItems: 'center'}}>
@@ -198,7 +243,7 @@ export default function Home() {
                 <Text style={{fontFamily: 'Inter_800ExtraBold', fontWeight: 800, color: '#ffffff', fontSize: 21, textAlign: 'left', textAlignVertical: 'top', marginTop: windowHeight * 6.8669527896996 / 100, paddingLeft: windowWidth * 5.8139534883721 / 100, paddingRight: windowWidth * 5.8139534883721 / 100, width: windowWidth * 54.651162790698 / 100}}>APARELHO{'\n'}ORTODONTICO</Text>
                 <Text style={{fontFamily: 'Lora_400Regular', color: '#ffffff', fontSize: 10, marginTop: windowHeight * 1.5021459227468 / 100, textAlign: 'left', width: windowWidth * 54.651162790698 / 100, paddingLeft: windowWidth * 5.8139534883721 / 100, paddingRight: windowWidth * 5.8139534883721 / 100}}>Agende sua consulta e tenha seu aparelho consertado com rapidez e eficiência. Não perca tempo, marque agora!</Text>
               </View>
-              <View style={{width: '100%', height: windowHeight * 6.4377682403433 / 100, justifyContent: 'center', alignItems: 'center', backgroundColor: '#04102B', borderRadius: 25}}><TouchableOpacity onPress={() => {navigation.navigate('Agendamento', { servico: 'Aparelho\nOrtodontico' })}} style={{ backgroundColor: '#ffffff', height: windowHeight * 4.2918454935622 / 100, justifyContent: 'center', borderRadius: 20, width: windowWidth * 17.441860465116 / 100}}><Text style={{flex: 1, color: '#04102B', textAlign: 'center', textAlignVertical: 'center'}}>Agendar</Text></TouchableOpacity></View>
+              <View style={{width: '100%', height: windowHeight * 6.4377682403433 / 100, justifyContent: 'center', alignItems: 'center', backgroundColor: '#04102B', borderRadius: 25}}><TouchableOpacity onPress={() => {navigation.navigate('Agendamento', { servico: 'Aparelho Ortodontico' })}} style={{ backgroundColor: '#ffffff', height: windowHeight * 4.2918454935622 / 100, justifyContent: 'center', borderRadius: 20, width: windowWidth * 17.441860465116 / 100}}><Text style={{flex: 1, color: '#04102B', textAlign: 'center', textAlignVertical: 'center'}}>Agendar</Text></TouchableOpacity></View>
             </ImageBackground>
 
             <ImageBackground style={{width: windowWidth * 69.767441860465 / 100, height: windowWidth * 69.767441860465 / 100, alignItems: 'center', paddingLeft: windowWidth * 5.8139534883721 / 100, paddingRight: windowWidth * 5.8139534883721 / 100, alignItems: 'center', justifyContent: 'center', marginBottom: windowHeight * 2.9431330472103 / 100}} source={require('../../assets/clareamento.png')}>
