@@ -8,6 +8,8 @@ import Login from './src/pages/Login';
 import Home from './src/pages/Home'; // Tela Home para onde o usuário logado será redirecionado
 import TelaInicial from './src/pages/TelaInicial';
 import Cadastro from './src/pages/Cadastro';
+import Inicio from './src/pages/Inicio'
+import Agendamento from './src/pages/Agendamento';
 
 const Stack = createStackNavigator();
 
@@ -36,6 +38,8 @@ export default function App() {
         <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
         <Stack.Screen name="TelaInicial" component={TelaInicial} options={{ headerShown: false }} />
         <Stack.Screen name="Cadastro" component={Cadastro} options={{ headerShown: false }} />
+        <Stack.Screen name="Inicio" component={Inicio} options={{ headerShown: false }} />
+        <Stack.Screen name="Agendamento" component={Agendamento} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

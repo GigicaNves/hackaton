@@ -54,28 +54,44 @@ export default function Cadastro() {
   const [authUser, setAuthUser] = useState(null);
   const [userData, setUserData] = useState(null);
 
+  const [cpfValido, setCpfValido] = useState(false)
+
   useEffect(() => {
     if (font || error) {
       SplashScreen.hideAsync();
     }
-  });
+  }, [cpfValido]);
 
   if (!font && !error) {
     return null;
   }
 
+
+
   const navigation = useNavigation();
 
   const handleRegister = async () => {
     try {
-      const user = await registerUser(email, password, nome, cpf); // Chama a função de registro
-      console.log('Sucesso', `Usuário cadastrado com sucesso!`);
-      setAuthUser(user); // Atualiza o estado authUser com o usuário registrado
-      setEmail("");
-      setNome("");
-      setCpf("");
-      setPassword("");
-      navigation.navigate('Inicio')
+      //https://api.invertexto.com/v1/validator?token=15346%7CginCOn5eOxv7waAoqkqscBFF15Zy0lm4&value=${cpf}&type=cpf
+
+      await fetch(`https://api.invertexto.com/v1/validator?token=15346%7CginCOn5eOxv7waAoqkqscBFF15Zy0lm4&value=${cpf}&type=cpf`)
+      .then(async (response) => await response.json())
+      .then(async (json) => await setCpfValido(json.valid));
+      if(cpfValido == true)
+      {
+        
+        const user = await registerUser(email, password, nome, cpf); // Chama a função de registro
+        console.log('Sucesso', `Usuário cadastrado com sucesso!`);
+        setAuthUser(user); // Atualiza o estado authUser com o usuário registrado
+        setEmail("");
+        setNome("");
+        setCpf("");
+        setPassword("");
+        navigation.navigate('Inicio') 
+      }
+      else{
+        alert('CPF Inválido')
+      }
     } catch (error) {
       console.log('Erro ao cadastrar', error.message); // Mensagem de erro
     }
@@ -122,6 +138,7 @@ export default function Cadastro() {
             value={cpf}
             onChangeText={setCpf}
             autoCapitalize="none"
+            inputMode='numeric'
           />
           <TextInput
             style={[styles.dados, { marginBottom: (windowHeight * 1.6) / 100 }]}

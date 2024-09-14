@@ -25,7 +25,7 @@ export default function Inicio() {
       };
 
   return (
-      <Tab.Navigator initialRouteName="Ficha">
+      <Tab.Navigator initialRouteName="Home">
         <Tab.Screen name="Ficha" component={Ficha} options={{headerShown: false}} />
         <Tab.Screen name="Home" component={Home} options={{headerShown: false}} />
         <Tab.Screen name="Perfil" component={Perfil} options={{headerShown: false}} />
